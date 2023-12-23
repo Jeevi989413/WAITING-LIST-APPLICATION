@@ -1,0 +1,46 @@
+import psycopg2
+from psycopg2 import sql
+
+# Create a connection to the database
+connection = psycopg2.connect(
+    host="localhost",
+    database="waiting_list",
+    user="your_username",
+    password="your_password"
+)
+
+cursor = connection.cursor()
+
+# Create patients table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS patients (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(15) UNIQUE NOT NULL,
+    doctor_id INT REFERENCES doctors(id)
+)
+""")
+
+# Create doctors table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS doctors (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(15) UNIQUE NOT NULL
+)
+""")
+
+# Create appointments table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS appointments (
+    id SERIAL PRIMARY KEY,
+    patient_id INT REFERENCES patients(id),
+    doctor_id INT REFERENCES doctors(id),
+    appointment_date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL
+)
+""")
+
+connection.commit()

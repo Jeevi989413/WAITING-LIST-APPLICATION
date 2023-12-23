@@ -1,0 +1,22 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Waitlist {
+    private Queue<Customer> waitlist;
+
+    public Waitlist() {
+        waitlist = new LinkedList<>();
+    }
+
+    public void addCustomer(Customer customer) {
+        waitlist.add(customer);
+    }
+
+    public Customer removeCustomer() {
+        return waitlist.poll();
+    }
+
+    public int getSize() {
+        return waitlist.size();
+    }
+}
